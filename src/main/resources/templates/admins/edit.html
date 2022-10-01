@@ -1,24 +1,128 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Edit user</title>
+    <meta charset="UTF-8"/>
+    <title>All users</title>
+    <link rel="stylesheet" href="../../../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+
 </head>
 <body>
-
-<form th:method="PATCH" th:action="@{/admins/{id}(id=${user.getId()})}" th:object="${user}">
-    <div>
-        <label for="username">Введите логин: </label>
-        <input type="text" th:field="*{username}" id="username"/>
-        <br/>
-        <label for="password">Введите пароль: </label>
-        <input type="text" th:field="*{password}" id="password"/>
-        <br>
-        <input type="submit" value="Change">
+<div class="dark"></div>
+<div class="header">
+    <div class="uinfo">
+        <nobr class="uinfo_email" th:text="${logUser.getEmail()}"></nobr>
+        <nobr class="uinfo_text">with roles:</nobr>
+        <nobr class="uinfo_roles" th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"></nobr>
     </div>
-</form>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Выйти из аккаунта" />
-</form>
+    <form class="logout" th:action="@{/logout}" method="post">
+        <input class="logout_inner" type="submit" value="Logout" />
+    </form>
+</div>
+<div class="row gx-0">
+    <div class="sel col-sm-2">
+        <a href="all.html" class="selection active">Admin</a>
+        <a href="../users/all.html" class="selection">User</a>
+    </div>
+    <div class="panel col-sm-10 p-3">
+        <h1>Admin panel</h1>
+        <ul class="nav nav-tabs mt-4">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/admins">Users table</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admins/new">New user</a>
+            </li>
+        </ul>
+        <div class="userList border rounded">
+            <h3 class="p-3 pt-2 pb-2 border-bottom mb-0">All users</h3>
+            <div class="table_around p-3">
+                <table class="table">
+                    <thead class="border-top border-bottom">
+                    <tr>
+                        <th class="border-0">ID</th>
+                        <th class="border-0">Firstname</th>
+                        <th class="border-0">Lastname</th>
+                        <th class="border-0">Age</th>
+                        <th class="border-0">Email</th>
+                        <th class="border-0">Role</th>
+                        <th class="border-0"></th>
+                        <th class="border-0"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="border-top border-bottom back" th:each="user : ${users}" th:if="${user.getFirstName() == logUser.getFirstName()}">
+                        <th class="border-0" scope="row" th:text="${user.getId()}"></th>
+                        <td class="border-0" th:text="${user.getFirstName()}"></td>
+                        <td class="border-0" th:text="${user.getLastName()}"></td>
+                        <td class="border-0" th:text="${user.getAge()}"></td>
+                        <td class="border-0" th:text="${user.getEmail()}"></td>
+                        <td class="border-0">
+                            <nobr th:each="role : ${user.getStringListRoles()}" th:text="${role} + ' '"> </nobr>
+                        </td>
+                        <td class="border-0"><a class="btn btn-primary" th:href="'/admins/edit/' + ${user.id}">Edit</a></td>
+                        <td class="border-0"><form  th:method="DELETE" th:action="'/admins/' + ${user.id}"><input class="btn btn-danger" type="submit" value="Delete"/></form></td>
+                    </tr>
+                    <tr th:each="user : ${users}" th:if="${user.getFirstName() != logUser.getFirstName()}">
+                        <th class="border-0" scope="row" th:text="${user.getId()}"></th>
+                        <td class="border-0" th:text="${user.getFirstName()}"></td>
+                        <td class="border-0" th:text="${user.getLastName()}"></td>
+                        <td class="border-0" th:text="${user.getAge()}"></td>
+                        <td class="border-0" th:text="${user.getEmail()}"></td>
+                        <td class="border-0">
+                            <nobr th:each="role : ${user.getStringListRoles()}" th:text="${role} + ' '"> </nobr>
+                        </td>
+                        <td class="border-0"><a class="btn btn-primary" th:href="'/admins/edit/' + ${user.id}">Edit</a></td>
+                        <td class="border-0"><form  th:method="DELETE" th:action="'/admins/' + ${user.id}"><input class="btn btn-danger" type="submit" value="Delete"/></form></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="edit">
+    <div class="border rounded">
+        <h3 class="header-edit p-3 pt-2 pb-2 border-bottom mb-0">
+            Edit user
+            <a type="button" class="btn-close btn-sm mt-1" aria-label="Close" href="/admins"></a>
+        </h3>
+        <form class="form_user p-0 pt-2" th:method="PATCH" th:action="@{/admins/{id}(id=${user.getId()})}" th:object="${user}">
+            <h5 class="form_header">ID</h5>
+            <input class="form-control w-50 mx-auto" type="text" readonly th:field="*{id}" id="id"/>
+            <br/>
+            <h5 class="form_header">First name</h5>
+            <input class="form-control w-50 mx-auto" type="text" th:field="*{firstName}" id="firstName"/>
+            <br/>
+            <h5 class="form_header">Last name</h5>
+            <input class="form-control w-50 mx-auto" type="text" th:field="*{lastName}" id="lastName"/>
+            <br/>
+            <h5 class="form_header">Age</h5>
+            <input class="form-control w-50 mx-auto" type="text" th:field="*{age}" id="age"/>
+            <br/>
+            <h5 class="form_header">Email</h5>
+            <input class="form-control w-50 mx-auto" type="text" th:field="*{email}" id="email"/>
+            <br/>
+            <h5 class="form_header">Password</h5>
+            <input class="form-control w-50 mx-auto" type="password" th:field="*{password}" id="password" th:value="' '"/>
+            <br/>
+
+            <h5 class="form_header">Role</h5>
+            <select class="form-control w-50 mx-auto" multiple size="2" id="roles" name="roles" th:field="*{roles}">
+                <option th:each="role : ${roles}"
+                        th:value="${{role}}"
+                        th:text="${role.getStringRole()}">
+                </option>
+            </select>
+            <br/>
+            <div class="buttons border-top py-3">
+                <a class="btn btn-secondary btn-edit" href="/admins" >Close</a>
+                <input class="btn btn-primary btn-edit" type="submit" value="Edit">
+            </div>
+
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

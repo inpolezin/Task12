@@ -87,10 +87,7 @@
             Edit user
             <a type="button" class="btn-close btn-sm mt-1" aria-label="Close" href="/admins"></a>
         </h3>
-        <form class="form_user p-0 pt-2" th:method="PATCH" th:action="@{/admins/{id}(id=${user.getId()})}" th:object="${user}">
-            <h5 class="form_header">ID</h5>
-            <input class="form-control w-50 mx-auto" type="text" readonly th:field="*{id}" id="id"/>
-            <br/>
+        <form class="form_user p-0 pt-2" th:method="DELETE" th:action="@{/admins/{id}(id=${user.getId()})}" th:object="${user}">
             <h5 class="form_header">First name</h5>
             <input class="form-control w-50 mx-auto" type="text" th:field="*{firstName}" id="firstName"/>
             <br/>
@@ -103,9 +100,6 @@
             <h5 class="form_header">Email</h5>
             <input class="form-control w-50 mx-auto" type="text" th:field="*{email}" id="email"/>
             <br/>
-            <h5 class="form_header">Password</h5>
-            <input class="form-control w-50 mx-auto" type="password" th:field="*{password}" id="password" th:value="' '"/>
-            <br/>
 
             <h5 class="form_header">Role</h5>
             <select class="form-control w-50 mx-auto" multiple size="2" id="roles" name="roles" th:field="*{roles}">
@@ -117,7 +111,7 @@
             <br/>
             <div class="buttons border-top py-3">
                 <a class="btn btn-secondary btn-edit" href="/admins" >Close</a>
-                <input class="btn btn-primary btn-edit" type="submit" value="Edit">
+                <input class="btn btn-danger btn-edit" type="submit" value="Delete">
             </div>
 
         </form>

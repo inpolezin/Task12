@@ -3,22 +3,59 @@
 <head>
     <meta charset="UTF-8"/>
     <title>All users</title>
+    <link rel="stylesheet" href="../../../static/css/style.css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+
 </head>
 <body>
-<h1>Ваши данные</h1>
-<table border="1">
-    <tr>
-        <th>Имя пользователя</th>
-        <th>Пароль</th>
-    </tr>
-    <tr th:each="user : ${user}">
-        <td th:text="${user.getUsername()}"></td>
-        <td th:text="${user.getPassword()}"></td>
-    </tr>
-</table>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Выйти из аккаунта" />
-</form>
+<div class="header">
+    <div class="uinfo">
+        <nobr class="uinfo_email" th:text="${logUser.getEmail()}"></nobr>
+        <nobr class="uinfo_text">with roles:</nobr>
+        <nobr class="uinfo_roles" th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"></nobr>
+    </div>
+    <form class="logout" th:action="@{/logout}" method="post">
+        <input class="logout_inner" type="submit" value="Logout" />
+    </form>
+</div>
+<div class="row gx-0">
+    <div class="sel col-sm-2">
+        <a th:if="${#lists.contains(logUser.getStringListRoles(), 'ADMIN')}" href="/admins" class="selection">Admin</a>
+        <a href="/users" class="selection active">User</a>
+    </div>
+    <div class="panel col-sm-10 p-3">
+        <h1>User information page</h1>
+        <div class="userList border rounded">
+            <h3 class="p-3 pt-2 pb-2 border-bottom mb-0">About user</h3>
+            <div class="table_around p-3">
+                <table class="table">
+                    <thead class="border-top border-bottom">
+                    <tr>
+                        <th class="border-0">ID</th>
+                        <th class="border-0">Firstname</th>
+                        <th class="border-0">Lastname</th>
+                        <th class="border-0">Age</th>
+                        <th class="border-0">Email</th>
+                        <th class="border-0">Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="border-top border-bottom back">
+                        <th class="border-0" scope="row" th:text="${logUser.getId()}"></th>
+                        <td class="border-0" th:text="${logUser.getFirstName()}"></td>
+                        <td class="border-0" th:text="${logUser.getLastName()}"></td>
+                        <td class="border-0" th:text="${logUser.getAge()}"></td>
+                        <td class="border-0" th:text="${logUser.getEmail()}"></td>
+                        <td class="border-0">
+                            <nobr th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"> </nobr>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

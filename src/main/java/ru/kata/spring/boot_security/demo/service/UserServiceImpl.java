@@ -5,16 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
@@ -27,8 +30,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void saveUser(User user) {
-        List<Role> roles = Collections.singletonList(roleRepository.findRoleByName("ROLE_USER"));
-        user.setRoles(roles);
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -40,8 +42,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void updateUser(User user) {
         User userDb = findUserById(user.getId());
-        userDb.setUsername(user.getUsername());
-        userDb.setPassword(user.getPassword());
+        userDb.setFirstName(user.getFirstName());
+        userDb.setLastName(user.getLastName());
+        userDb.setEmail(user.getEmail());
+        userDb.setAge(user.getAge());
+        userDb.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userDb.setRoles(user.getRoles());
         userRepository.save(userDb);
     }
@@ -52,13 +57,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findUserByUsername(String username) {
-        return userRepository.findByUsername(username).get();
+    public User findUserByFirstname(String username) {
+        return userRepository.findByFirstName(username).get();
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) {
-        Optional<User> userOptional = userRepository.findByUsername(s);
+        Optional<User> userOptional = userRepository.findByFirstName(s);
 
         if(userOptional.isEmpty()) {
             throw new UsernameNotFoundException("Username not found");

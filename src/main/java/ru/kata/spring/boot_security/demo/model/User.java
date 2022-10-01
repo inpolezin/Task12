@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -23,8 +26,17 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_name")
-    private String username;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "age")
+    private Integer age;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
@@ -35,6 +47,13 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles;
+
+    public List<String> getStringListRoles () {
+        return roles.stream()
+                .map(Role::getName)
+                .map(s -> s.substring(5))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -48,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return firstName;
     }
 
     @Override

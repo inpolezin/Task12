@@ -5,7 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admins")
@@ -14,15 +18,20 @@ public class AdminController {
 
     private final UserService userService;
 
+    private final RoleService roleService;
+
     @GetMapping
-    public String getAllUsersPage(Model model) {
+    public String getAllUsersPage(Principal principal, Model model) {
         model.addAttribute("users", userService.findAllUsers());
+        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
         return "admins/all";
     }
 
     @GetMapping("/new")
-    public String getCreateUserPage(Model model) {
+    public String getCreateUserPage(Principal principal, Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
+        model.addAttribute("roles", roleService.findAllRoles());
         return "admins/new";
     }
 
@@ -39,10 +48,22 @@ public class AdminController {
     }
 
     @GetMapping("/edit/{id}")
-    public String getEditUserPage(Model model, @PathVariable("id") Long id) {
+    public String getEditUserPage(Principal principal, Model model, @PathVariable("id") Long id) {
+        model.addAttribute("users", userService.findAllUsers());
         model.addAttribute("user", userService.findUserById(id));
+        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
+        model.addAttribute("roles", roleService.findAllRoles());
         return "admins/edit";
     }
+    @GetMapping("/delete/{id}")
+    public String getDeleteUserPage(Principal principal, Model model, @PathVariable("id") Long id) {
+        model.addAttribute("users", userService.findAllUsers());
+        model.addAttribute("user", userService.findUserById(id));
+        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
+        model.addAttribute("roles", roleService.findAllRoles());
+        return "admins/delete";
+    }
+
 
     @PatchMapping("/{id}")
     public String updateUser(@ModelAttribute("user") User user) {
