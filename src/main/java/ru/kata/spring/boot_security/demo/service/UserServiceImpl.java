@@ -21,7 +21,6 @@ import java.util.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     @Override
     public List<User> findAllUsers() {

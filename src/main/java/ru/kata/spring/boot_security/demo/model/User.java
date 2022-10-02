@@ -1,9 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +12,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
 @Entity
 @RequiredArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name = "users")
 public class User implements UserDetails {
 
