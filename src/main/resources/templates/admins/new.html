@@ -53,9 +53,9 @@
           <br/>
 
           <h5 class="form_header">Role</h5>
-          <select class="form-control" multiple size="2" id="roles" name="roles" th:field="*{roles}">
+          <select class="form-control" multiple size="2" id="roles"  th:name="roles">
             <option th:each="role : ${roles}"
-                    th:value="${{role}}"
+                    th:value="${role.getId()}"
                     th:text="${role.getStringRole()}">
             </option>
           </select>
