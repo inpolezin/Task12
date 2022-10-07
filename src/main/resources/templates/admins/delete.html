@@ -13,7 +13,7 @@
     <div class="uinfo">
         <nobr class="uinfo_email" th:text="${logUser.getEmail()}"></nobr>
         <nobr class="uinfo_text">with roles:</nobr>
-        <nobr class="uinfo_roles" th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"></nobr>
+        <nobr class="uinfo_roles" th:each="role : ${logUserRoles}" th:text="${role} + ' '"></nobr>
     </div>
     <form class="logout" th:action="@{/logout}" method="post">
         <input class="logout_inner" type="submit" value="Logout" />
@@ -58,7 +58,7 @@
                         <td class="border-0" th:text="${user.getAge()}"></td>
                         <td class="border-0" th:text="${user.getEmail()}"></td>
                         <td class="border-0">
-                            <nobr th:each="role : ${user.getStringListRoles()}" th:text="${role} + ' '"> </nobr>
+                            <nobr th:each="role : ${logUserRoles}" th:text="${role} + ' '"> </nobr>
                         </td>
                         <td class="border-0"><a class="btn btn-primary" th:href="'/admins/edit/' + ${user.id}">Edit</a></td>
                         <td class="border-0"><form  th:method="DELETE" th:action="'/admins/' + ${user.id}"><input class="btn btn-danger" type="submit" value="Delete"/></form></td>
@@ -70,7 +70,7 @@
                         <td class="border-0" th:text="${user.getAge()}"></td>
                         <td class="border-0" th:text="${user.getEmail()}"></td>
                         <td class="border-0">
-                            <nobr th:each="role : ${user.getStringListRoles()}" th:text="${role} + ' '"> </nobr>
+                            <nobr th:each="role : ${user.getRoles()}" th:text="${role.getStringRole()} + ' '"> </nobr>
                         </td>
                         <td class="border-0"><a class="btn btn-primary" th:href="'/admins/edit/' + ${user.id}">Edit</a></td>
                         <td class="border-0"><form  th:method="DELETE" th:action="'/admins/' + ${user.id}"><input class="btn btn-danger" type="submit" value="Delete"/></form></td>

@@ -46,13 +46,6 @@ public class User implements UserDetails {
     )
     private List<Role> roles;
 
-    public List<String> getStringListRoles () {
-        return roles.stream()
-                .map(Role::getName)
-                .map(s -> s.substring(5))
-                .collect(Collectors.toList());
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;

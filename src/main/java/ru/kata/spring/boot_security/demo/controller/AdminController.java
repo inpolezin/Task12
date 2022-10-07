@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
@@ -11,6 +12,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admins")
@@ -23,15 +25,28 @@ public class AdminController {
 
     @GetMapping
     public String getAllUsersPage(Principal principal, Model model) {
+        User logUser = userService.findUserByFirstname(principal.getName());
+        List<String> logUserRoles = logUser.getRoles().stream()
+                .map(Role::getName)
+                .map(s -> s.substring(5))
+                .collect(Collectors.toList());
+        model.addAttribute("logUser", logUser);
+        model.addAttribute("logUserRoles", logUserRoles);
         model.addAttribute("users", userService.findAllUsers());
-        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
         return "admins/all";
     }
 
     @GetMapping("/new")
     public String getCreateUserPage(Principal principal, Model model) {
+        User logUser = userService.findUserByFirstname(principal.getName());
+        List<String> logUserRoles = logUser.getRoles().stream()
+                .map(Role::getName)
+                .map(s -> s.substring(5))
+                .collect(Collectors.toList());
+        model.addAttribute("logUser", logUser);
+        model.addAttribute("logUserRoles", logUserRoles);
+        model.addAttribute("users", userService.findAllUsers());
         model.addAttribute("user", new User());
-        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
         model.addAttribute("roles", roleService.findAllRoles());
         return "admins/new";
     }
@@ -50,17 +65,29 @@ public class AdminController {
 
     @GetMapping("/edit/{id}")
     public String getEditUserPage(Principal principal, Model model, @PathVariable("id") Long id) {
+        User logUser = userService.findUserByFirstname(principal.getName());
+        List<String> logUserRoles = logUser.getRoles().stream()
+                .map(Role::getName)
+                .map(s -> s.substring(5))
+                .collect(Collectors.toList());
+        model.addAttribute("logUser", logUser);
+        model.addAttribute("logUserRoles", logUserRoles);
         model.addAttribute("users", userService.findAllUsers());
         model.addAttribute("user", userService.findUserById(id));
-        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
         model.addAttribute("roles", roleService.findAllRoles());
         return "admins/edit";
     }
     @GetMapping("/delete/{id}")
     public String getDeleteUserPage(Principal principal, Model model, @PathVariable("id") Long id) {
+        User logUser = userService.findUserByFirstname(principal.getName());
+        List<String> logUserRoles = logUser.getRoles().stream()
+                .map(Role::getName)
+                .map(s -> s.substring(5))
+                .collect(Collectors.toList());
+        model.addAttribute("logUser", logUser);
+        model.addAttribute("logUserRoles", logUserRoles);
         model.addAttribute("users", userService.findAllUsers());
         model.addAttribute("user", userService.findUserById(id));
-        model.addAttribute("logUser", userService.findUserByFirstname(principal.getName()));
         model.addAttribute("roles", roleService.findAllRoles());
         return "admins/delete";
     }

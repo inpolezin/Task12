@@ -12,7 +12,7 @@
     <div class="uinfo">
         <nobr class="uinfo_email" th:text="${logUser.getEmail()}"></nobr>
         <nobr class="uinfo_text">with roles:</nobr>
-        <nobr class="uinfo_roles" th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"></nobr>
+        <nobr class="uinfo_roles" th:each="role : ${logUserRoles}" th:text="${role} + ' '"></nobr>
     </div>
     <form class="logout" th:action="@{/logout}" method="post">
         <input class="logout_inner" type="submit" value="Logout" />
@@ -20,7 +20,7 @@
 </div>
 <div class="row gx-0">
     <div class="sel col-sm-2">
-        <a th:if="${#lists.contains(logUser.getStringListRoles(), 'ADMIN')}" href="/admins" class="selection">Admin</a>
+        <a th:if="${#lists.contains(logUserRoles, 'ADMIN')}" href="/admins" class="selection">Admin</a>
         <a href="/users" class="selection active">User</a>
     </div>
     <div class="panel col-sm-10 p-3">
@@ -47,7 +47,7 @@
                         <td class="border-0" th:text="${logUser.getAge()}"></td>
                         <td class="border-0" th:text="${logUser.getEmail()}"></td>
                         <td class="border-0">
-                            <nobr th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"> </nobr>
+                            <nobr th:each="role : ${logUserRoles}" th:text="${role} + ' '"> </nobr>
                         </td>
                     </tr>
                     </tbody>

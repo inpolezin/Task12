@@ -12,7 +12,7 @@
   <div class="uinfo">
     <nobr class="uinfo_email" th:text="${logUser.getEmail()}"></nobr>
     <nobr class="uinfo_text">with roles:</nobr>
-    <nobr class="uinfo_roles" th:each="role : ${logUser.getStringListRoles()}" th:text="${role} + ' '"></nobr>
+    <nobr class="uinfo_roles" th:each="role : ${logUserRoles}" th:text="${role} + ' '"></nobr>
   </div>
   <form class="logout" th:action="@{/logout}" method="post">
     <input class="logout_inner" type="submit" value="Logout" />
